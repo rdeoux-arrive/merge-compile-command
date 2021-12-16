@@ -1,0 +1,19 @@
+[package]
+name = "merge-compile-command"
+version = "1.0.0"
+authors = ["Romain Déoux <ext-romain.deoux@flowbird.group>"]
+edition = "2021"
+description = "Merge compile_commands.json into one big one"
+keywords = ["clangd", "clang-tools", "compile_commands.json"]
+categories = ["development-tools"]
+publish = false
+
+[dependencies]
+json = "0.12.4"
+log = "0.4.14"
+simple_logger = "1.16.0"
+walkdir = "2.3.2"
+
+[[bin]]
+name = "mcc"
+path = "src/main.rs"
