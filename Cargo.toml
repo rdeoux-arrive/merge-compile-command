@@ -1,6 +1,6 @@
 [package]
 name = "merge-compile-command"
-version = "1.0.0"
+version = "1.1.0"
 authors = ["Romain Déoux <ext-romain.deoux@flowbird.group>"]
 edition = "2021"
 description = "Merge compile_commands.json into one big one"

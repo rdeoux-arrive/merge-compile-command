@@ -17,9 +17,13 @@ fn main() {
     let mut cc = Array::new();
     match current_dir() {
         Ok(path) => {
+            let mut out = path.clone();
+            out.push(FILENAME);
             for entry in WalkDir::new(&path).into_iter().filter_entry(|entry| {
                 entry.file_type().is_dir()
-                    || (entry.file_type().is_file() && entry.file_name() == FILENAME)
+                    || (entry.file_type().is_file()
+                        && entry.file_name() == FILENAME
+                        && entry.path() != out)
             }) {
                 match entry {
                     Ok(entry) if entry.file_type().is_file() => {
