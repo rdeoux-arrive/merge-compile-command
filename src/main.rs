@@ -2,7 +2,7 @@
 #![warn(clippy::nursery)]
 #![warn(clippy::pedantic)]
 
-use json::{parse, stringify, Array, JsonValue};
+use json::{parse, stringify_pretty, Array, JsonValue};
 use log::{error, info};
 use simple_logger::SimpleLogger;
 use std::env::current_dir;
@@ -50,7 +50,7 @@ fn main() {
 
     if !cc.is_empty() {
         info!("saving {:?}", FILENAME);
-        if let Err(err) = write(FILENAME, stringify(cc)) {
+        if let Err(err) = write(FILENAME, stringify_pretty(cc, 2)) {
             error!("failed to write into compile_command.json: {}", err);
         }
     }
