@@ -9,10 +9,10 @@ categories = ["development-tools"]
 publish = false
 
 [dependencies]
-json = "0.12.4"
-log = "0.4.17"
-simple_logger = "2.3.0"
-walkdir = "2.3.2"
+log = "0.4.35"
+serde_json = "1.0"
+simple_logger = "5.2.0"
+walkdir = "2.5.0"
 
 [[bin]]
 name = "mcc"
