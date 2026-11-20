@@ -2,8 +2,8 @@
 #![warn(clippy::nursery)]
 #![warn(clippy::pedantic)]
 
-use json::{parse, stringify_pretty, Array, JsonValue};
 use log::{error, info};
+use serde_json::{from_str, to_string_pretty, Value};
 use simple_logger::SimpleLogger;
 use std::env::current_dir;
 use std::fs::{read_to_string, write};
@@ -14,7 +14,7 @@ const FILENAME: &str = "compile_commands.json";
 fn main() {
     SimpleLogger::new().env().init().ok();
 
-    let mut cc = Array::new();
+    let mut cc = Vec::new();
     match current_dir() {
         Ok(path) => {
             let mut out = path.clone();
@@ -30,8 +30,8 @@ fn main() {
                         let path = entry.path();
                         info!("loading {:?}", path);
                         match read_to_string(&path) {
-                            Ok(source) => match parse(&source) {
-                                Ok(JsonValue::Array(mut array)) => cc.append(&mut array),
+                            Ok(source) => match from_str(&source) {
+                                Ok(Value::Array(mut array)) => cc.append(&mut array),
                                 Ok(..) => error!("{:?} does not contains an array", path),
                                 Err(err) => {
                                     error!("failed to parse the content of {:?}: {}", path, err);
@@ -50,8 +50,13 @@ fn main() {
 
     if !cc.is_empty() {
         info!("saving {:?}", FILENAME);
-        if let Err(err) = write(FILENAME, stringify_pretty(cc, 2)) {
-            error!("failed to write into compile_command.json: {}", err);
+        match to_string_pretty(&cc) {
+            Ok(out) => {
+                if let Err(err) = write(FILENAME, out) {
+                    error!("failed to write into compile_command.json: {}", err);
+                }
+            }
+            Err(err) => error!("failed to serialize: {}", err),
         }
     }
 }
