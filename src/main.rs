@@ -28,35 +28,38 @@ fn main() {
                 match entry {
                     Ok(entry) if entry.file_type().is_file() => {
                         let path = entry.path();
-                        info!("loading {:?}", path);
-                        match read_to_string(&path) {
+                        info!("loading {}", path.display());
+                        match read_to_string(path) {
                             Ok(source) => match from_str(&source) {
                                 Ok(Value::Array(mut array)) => cc.append(&mut array),
-                                Ok(..) => error!("{:?} does not contains an array", path),
+                                Ok(..) => error!("{} does not contains an array", path.display()),
                                 Err(err) => {
-                                    error!("failed to parse the content of {:?}: {}", path, err);
+                                    error!(
+                                        "failed to parse the content of {}: {err}",
+                                        path.display()
+                                    );
                                 }
                             },
-                            Err(err) => error!("failed to read {:?}: {}", path, err),
+                            Err(err) => error!("failed to read {}: {err}", path.display()),
                         }
                     }
                     Ok(..) => {}
-                    Err(err) => error!("failed to walk in {:?}: {}", path, err),
+                    Err(err) => error!("failed to walk in {}: {err}", path.display()),
                 }
             }
         }
-        Err(err) => error!("failed to get the current directory: {}", err),
+        Err(err) => error!("failed to get the current directory: {err}"),
     }
 
     if !cc.is_empty() {
-        info!("saving {:?}", FILENAME);
+        info!("saving {FILENAME}");
         match to_string_pretty(&cc) {
             Ok(out) => {
                 if let Err(err) = write(FILENAME, out) {
-                    error!("failed to write into compile_command.json: {}", err);
+                    error!("failed to write into compile_command.json: {err}");
                 }
             }
-            Err(err) => error!("failed to serialize: {}", err),
+            Err(err) => error!("failed to serialize: {err}"),
         }
     }
 }
