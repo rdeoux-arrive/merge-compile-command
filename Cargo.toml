@@ -10,9 +10,9 @@ publish = false
 
 [dependencies]
 json = "0.12.4"
-log = "0.4.17"
+log = "0.4.35"
 simple_logger = "2.3.0"
-walkdir = "2.3.2"
+walkdir = "2.5.0"
 
 [[bin]]
 name = "mcc"
