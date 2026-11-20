@@ -30,9 +30,8 @@ fn main() {
                         let path = entry.path();
                         info!("loading {}", path.display());
                         match read_to_string(path) {
-                            Ok(source) => match from_str(&source) {
-                                Ok(Value::Array(mut array)) => cc.append(&mut array),
-                                Ok(..) => error!("{} does not contains an array", path.display()),
+                            Ok(source) => match from_str::<Vec<Value>>(&source) {
+                                Ok(mut array) => cc.append(&mut array),
                                 Err(err) => {
                                     error!(
                                         "failed to parse the content of {}: {err}",
